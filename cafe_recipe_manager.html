@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>삼막창고카페 레시피 북 (Sammag Changgo Cafe)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Noto Sans KR & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cafe: {
+              50: '#FAF6F0',
+              100: '#F5EBE0',
+              200: '#E3D5CA',
+              300: '#D5B9B2',
+              400: '#B5838D',
+              500: '#9A6B62',
+              600: '#6B4E3D',
+              700: '#4A3326',
+              800: '#322218',
+            },
+            cream: '#FFFDF9',
+          },
+          fontFamily: {
+            sans: ['"Noto Sans KR"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF6F0;
+      color: #4A3326;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F5EBE0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D5B9B2;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #B5838D;
+    }
+
+    .glass-card {
+      background: rgba(255, 253, 249, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(227, 213, 202, 0.6);
+    }
+
+    .modal-backdrop {
+      background: rgba(50, 34, 24, 0.45);
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-cafe-300 selection:text-cafe-800">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-30 bg-cream/90 backdrop-blur-md border-b border-cafe-200/80 shadow-sm transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
+        <div class="w-10 h-10 rounded-full bg-cafe-200 text-cafe-700 flex items-center justify-center text-xl shadow-inner">
+          <i class="fa-solid fa-warehouse"></i>
+        </div>
+        <div>
+          <h1 class="font-serif font-bold text-xl sm:text-2xl text-cafe-700 tracking-tight leading-none">삼막창고카페</h1>
+          <p class="text-xs text-cafe-500 font-medium mt-0.5">1kg 대량 제조 & 프렙 매니저</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- Bookmark filter button -->
+        <button id="favorite-filter-btn" onclick="toggleFavoriteFilter()" 
+          class="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium border border-cafe-200 bg-white hover:bg-cafe-100 text-cafe-600 transition-all shadow-sm">
+          <i id="fav-filter-icon" class="fa-regular fa-heart text-cafe-400"></i>
+          <span class="hidden sm:inline">즐겨찾기</span>
+          <span id="fav-count-badge" class="bg-cafe-200 text-cafe-700 text-xs px-1.5 py-0.5 rounded-full font-bold">0</span>
+        </button>
+
+        <!-- Add Recipe Button -->
+        <button onclick="openRecipeModal()" 
+          class="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-cafe-600 hover:bg-cafe-700 text-white transition-all shadow-md active:scale-95">
+          <i class="fa-solid fa-plus"></i>
+          <span>1kg 레시피 추가</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- HERO BANNER -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-cafe-600 via-cafe-500 to-cafe-400 text-white p-6 sm:p-8 shadow-lg mb-8">
+      <div class="absolute -right-6 -bottom-8 opacity-15 text-8xl sm:text-9xl pointer-events-none select-none">
+        🏭
+      </div>
+      <div class="relative z-10 max-w-2xl">
+        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs rounded-full font-medium mb-3">
+          📦 1kg Batch Manufacturing Standard
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold font-serif mb-2 leading-snug">
+          삼막창고카페 1kg 수제 청 & 베이스 프렙 북
+        </h2>
+        <p class="text-cafe-100 text-xs sm:text-sm leading-relaxed">
+          삼막창고카페의 모든 수제 청, 베이스, 토핑 프렙을 1kg(1,000g) 완성 배치 표준 레시피로 통합 관리하세요.
+        </p>
+      </div>
+    </div>
+
+    <!-- SEARCH & FILTER BAR -->
+    <div class="space-y-4 mb-8">
+      <!-- Search Input -->
+      <div class="relative max-w-lg mx-auto sm:mx-0">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-cafe-400"></i>
+        <input type="text" id="search-input" oninput="handleSearch()" placeholder="베이스명, 재료, 태그 검색 (예: 딸기청, 아쌈, 거북이 얼음)..."
+          class="w-full pl-11 pr-10 py-3 rounded-xl bg-white border border-cafe-200 focus:outline-none focus:ring-2 focus:ring-cafe-400 focus:border-transparent text-sm placeholder-cafe-400 shadow-sm transition-all" />
+        <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-cafe-400 hover:text-cafe-600 p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none pt-1" id="category-tabs">
+        <!-- Tabs injected by JS -->
+      </div>
+    </div>
+
+    <!-- RECIPE CARD GRID -->
+    <div id="recipe-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Cards rendered here via JavaScript -->
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div id="empty-state" class="hidden text-center py-16 px-4">
+      <div class="w-20 h-20 mx-auto mb-4 bg-cafe-100 text-cafe-400 rounded-full flex items-center justify-center text-3xl">
+        <i class="fa-solid fa-cookie-bite"></i>
+      </div>
+      <h3 class="text-lg font-bold text-cafe-700 mb-1">검색된 레시피가 없습니다</h3>
+      <p class="text-sm text-cafe-500 mb-4">다른 키워드로 검색하거나 새로운 1kg 레시피를 추가해 보세요!</p>
+      <button onclick="resetFilters()" class="inline-flex items-center space-x-2 px-4 py-2 bg-cafe-200 hover:bg-cafe-300 text-cafe-700 rounded-xl text-xs font-semibold transition-colors">
+        <i class="fa-solid fa-rotate-left"></i>
+        <span>필터 초기화</span>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-cream border-t border-cafe-200/80 py-6 text-center text-xs text-cafe-500 mt-12">
+    <div class="max-w-6xl mx-auto px-4">
+      <p class="font-serif">© 삼막창고카페 (Sammag Changgo Cafe) Batch Recipe Studio. All rights reserved.</p>
+      <p class="mt-1 text-cafe-400">정확한 비율의 1kg 프렙 매니저로 완벽한 맛을 구현합니다.</p>
+    </div>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- MODAL: RECIPE DETAIL & BATCH CALCULATOR -->
+  <!-- ========================================== -->
+  <div id="detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-cream rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-cafe-200 overflow-hidden transform scale-95 transition-transform duration-300" id="detail-modal-card">
+      
+      <!-- Modal Header Image/Banner -->
+      <div class="relative bg-gradient-to-r from-cafe-300 to-cafe-200 p-6 flex items-start justify-between text-cafe-800">
+        <div class="flex items-center space-x-4">
+          <span id="detail-emoji" class="text-5xl filter drop-shadow-md">🍹</span>
+          <div>
+            <span id="detail-category" class="inline-block px-2.5 py-0.5 bg-white/80 text-cafe-700 text-xs font-bold rounded-full mb-1">카테고리</span>
+            <h2 id="detail-title" class="text-2xl font-bold font-serif text-cafe-800 leading-tight">메뉴 이름</h2>
+          </div>
+        </div>
+        <button onclick="closeDetailModal()" class="w-9 h-9 bg-white/80 hover:bg-white text-cafe-700 rounded-full flex items-center justify-center shadow-sm transition-transform active:scale-90">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-6 overflow-y-auto space-y-6 flex-grow">
+
+        <!-- Batch Scale Converter Section -->
+        <div class="bg-cafe-50 border border-cafe-200 p-4 rounded-2xl space-y-3 shadow-inner">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <i class="fa-solid fa-calculator text-cafe-500 text-lg"></i>
+              <div>
+                <p class="text-xs font-bold text-cafe-700">목표 완성량 계산기 (Batch Scale Calculator)</p>
+                <p class="text-[11px] text-cafe-500">기준 레시피: 1kg(1,000g) 완성 기준</p>
+              </div>
+            </div>
+            <span id="batch-scale-indicator" class="text-xs font-bold text-cafe-700 bg-cafe-200 px-2.5 py-1 rounded-lg">1.0x 배율</span>
+          </div>
+
+          <!-- Quick Weight Buttons & Custom Input -->
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button onclick="setTargetWeight(500)" class="quick-batch-btn px-3 py-1.5 rounded-xl border border-cafe-200 bg-white text-xs font-bold text-cafe-700 hover:bg-cafe-100 transition-colors">500g</button>
+            <button onclick="setTargetWeight(1000)" class="quick-batch-btn px-3 py-1.5 rounded-xl border border-cafe-200 bg-white text-xs font-bold text-cafe-700 hover:bg-cafe-100 transition-colors">1kg</button>
+            <button onclick="setTargetWeight(2000)" class="quick-batch-btn px-3 py-1.5 rounded-xl border border-cafe-200 bg-white text-xs font-bold text-cafe-700 hover:bg-cafe-100 transition-colors">2kg</button>
+            <button onclick="setTargetWeight(3000)" class="quick-batch-btn px-3 py-1.5 rounded-xl border border-cafe-200 bg-white text-xs font-bold text-cafe-700 hover:bg-cafe-100 transition-colors">3kg</button>
+            <button onclick="setTargetWeight(5000)" class="quick-batch-btn px-3 py-1.5 rounded-xl border border-cafe-200 bg-white text-xs font-bold text-cafe-700 hover:bg-cafe-100 transition-colors">5kg</button>
+
+            <div class="flex items-center space-x-1 ml-auto bg-white px-2 py-1 rounded-xl border border-cafe-200">
+              <input type="number" id="custom-weight-input" oninput="handleCustomWeightInput(this.value)" placeholder="1000" min="50" step="50"
+                class="w-16 text-right text-xs font-bold text-cafe-800 outline-none" />
+              <span class="text-xs font-bold text-cafe-500">g</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ingredients List -->
+        <div>
+          <h3 class="text-sm font-bold text-cafe-700 flex items-center space-x-2 mb-3">
+            <i class="fa-solid fa-basket-shopping text-cafe-500"></i>
+            <span>배합 재료 용량 (Batch Ingredients)</span>
+          </h3>
+          <div id="detail-ingredients" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+
+        <!-- Recommended Pairing / Ice & Topping Section -->
+        <div id="pairing-section" class="bg-amber-50/70 border border-amber-200/80 p-4 rounded-2xl">
+          <h3 class="text-xs font-bold text-amber-800 flex items-center space-x-1.5 mb-1.5">
+            <i class="fa-solid fa-cubes-stacked text-amber-600"></i>
+            <span>💡 1잔 서빙 시 추천 조합 & 서빙 비율 Guide</span>
+          </h3>
+          <p id="detail-pairing" class="text-xs text-amber-900 leading-relaxed font-medium">
+            <!-- Injected via JS -->
+          </p>
+        </div>
+
+        <!-- Step by Step Preparation -->
+        <div>
+          <h3 class="text-sm font-bold text-cafe-700 flex items-center space-x-2 mb-3">
+            <i class="fa-solid fa-list-ol text-cafe-500"></i>
+            <span>대량 제조 및 프렙 순서 (Batch Manufacturing Steps)</span>
+          </h3>
+          <ol id="detail-steps" class="space-y-2.5 pl-1">
+            <!-- Injected via JS -->
+          </ol>
+        </div>
+
+        <!-- Secret Tips -->
+        <div class="bg-cafe-100/60 p-4 rounded-2xl border border-cafe-200/60">
+          <h3 class="text-xs font-bold text-cafe-700 flex items-center space-x-1.5 mb-1">
+            <i class="fa-solid fa-wand-magic-sparkles text-cafe-500"></i>
+            <span>세척 & 위생 / 보관 Secret Tip</span>
+          </h3>
+          <p id="detail-tip" class="text-xs text-cafe-600 leading-relaxed">
+            <!-- Injected via JS -->
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="bg-cream p-4 border-t border-cafe-200 flex items-center justify-between">
+        <button id="modal-fav-btn" onclick="toggleFavoriteFromModal()" 
+          class="flex items-center space-x-1.5 px-4 py-2.5 rounded-xl border border-cafe-200 bg-white hover:bg-cafe-100 text-cafe-700 text-xs font-bold transition-all shadow-sm">
+          <i id="modal-fav-icon" class="fa-regular fa-heart"></i>
+          <span>즐겨찾기</span>
+        </button>
+
+        <div class="flex items-center space-x-2">
+          <button id="modal-edit-btn" onclick="editCurrentRecipe()" 
+            class="px-4 py-2.5 rounded-xl border border-cafe-200 bg-white hover:bg-cafe-100 text-cafe-700 text-xs font-bold transition-all">
+            <i class="fa-solid fa-pen-to-square mr-1"></i> 수정
+          </button>
+          <button id="modal-delete-btn" onclick="deleteCurrentRecipe()" 
+            class="px-4 py-2.5 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold transition-all">
+            <i class="fa-solid fa-trash mr-1"></i> 삭제
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: ADD / EDIT RECIPE FORM -->
+  <!-- ========================================== -->
+  <div id="form-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-cream rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-cafe-200 overflow-hidden transform scale-95 transition-transform duration-300" id="form-modal-card">
+      
+      <!-- Modal Header -->
+      <div class="bg-cafe-600 p-5 text-white flex items-center justify-between">
+        <h2 id="form-title" class="text-lg font-bold font-serif flex items-center space-x-2">
+          <i class="fa-solid fa-utensils text-cafe-200"></i>
+          <span>새 1kg 레시피 등록</span>
+        </h2>
+        <button onclick="closeFormModal()" class="w-8 h-8 bg-white/20 hover:bg-white/30 text-white rounded-full flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Form Body -->
+      <form id="recipe-form" onsubmit="saveRecipe(event)" class="p-6 overflow-y-auto space-y-4 flex-grow text-xs sm:text-sm">
+        <input type="hidden" id="form-id" />
+
+        <!-- Title & Emoji -->
+        <div class="grid grid-cols-4 gap-3">
+          <div class="col-span-1">
+            <label class="block font-bold text-cafe-700 mb-1">이모지</label>
+            <input type="text" id="form-emoji" required maxlength="2" placeholder="🍋" 
+              class="w-full text-center py-2 bg-white border border-cafe-200 rounded-xl focus:ring-2 focus:ring-cafe-400 outline-none text-xl" />
+          </div>
+          <div class="col-span-3">
+            <label class="block font-bold text-cafe-700 mb-1">베이스 / 프렙 메뉴명 *</label>
+            <input type="text" id="form-name" required placeholder="예: 청포도 에이드 베이스 (1kg)" 
+              class="w-full px-3 py-2 bg-white border border-cafe-200 rounded-xl focus:ring-2 focus:ring-cafe-400 outline-none" />
+          </div>
+        </div>
+
+        <!-- Category -->
+        <div>
+          <label class="block font-bold text-cafe-700 mb-1">카테고리 *</label>
+          <select id="form-category" required class="w-full px-3 py-2 bg-white border border-cafe-200 rounded-xl focus:ring-2 focus:ring-cafe-400 outline-none">
+            <option value="수제 청 & 베이스">수제 청 & 베이스</option>
+            <option value="논커피 & 라떼 베이스">논커피 & 라떼 베이스</option>
+            <option value="티 & 에이드 베이스">티 & 에이드 베이스</option>
+            <option value="얼음 & 토핑 프렙">얼음 & 토핑 프렙</option>
+          </select>
+        </div>
+
+        <!-- Short Description -->
+        <div>
+          <label class="block font-bold text-cafe-700 mb-1">한 줄 설명</label>
+          <input type="text" id="form-desc" placeholder="1kg 생산 관련 특이사항 및 용도 설명" 
+            class="w-full px-3 py-2 bg-white border border-cafe-200 rounded-xl focus:ring-2 focus:ring-cafe-400 outline-none" />
+        </div>
+
+        <!-- Ingredients Editor -->
+        <div>
+          <label class="block font-bold text-cafe-700 mb-1">
+            재료 목록 (1,000g 완성 기준) 
+            <span class="text-[11px] font-normal text-cafe-500">(줄바꿈으로 구분, 예: 블루베리 500g)</span>
+          </label>
+          <textarea id="form-ingredients" rows="4" required placeholder="블루베리 500g&#10;자일로스 설탕 450g&#10;레몬즙 50g" 
+            class="w-full px-3 py-2 bg-white border border-cafe-200 rounded-xl focus:ring-2 focus:ring-cafe-400 outline-none font-mono text-xs"></textarea>
+        </div>
+
+        <!-- Steps Editor -->
+        <div>
+          <label class="block font-bold text-cafe-700 mb-1">
+            대량 제조 순서
+            <span class="text-[11px] font-normal text-cafe-500">(줄바꿈으로 단계 구분)</span>
+          </label>
+          <textarea id="form-steps" rows="4" required placeholder="1. 블루베리를 베이킹소다수로 세척 후 완전히 건조합니다.&#10;2. 과육 250g은 으깨고 250g은 원형 보존합니다.&#10;3. 설탕 및 레몬즙과 혼합 후 소독 용기에 담습니다." 
+            class="w-full px-3 py-2 bg-white border border-cafe-200 rounded-xl focus:ring-2 focus:ring-cafe-400 outline-none text-xs"></textarea>
+        </div>
+
+        <!-- Recommended Pairing / Serving Guide -->
+        <div>
+          <label class="block font-bold text-cafe-700 mb-1">1잔 서빙 가이드</label>
+          <input type="text" id="form-pairing" placeholder="예: 베이스 60g + 탄산수 150g + 얼음 150g" 
+            class="w-full px-3 py-2 bg-white border border-cafe-200 rounded-xl focus:ring-2 focus:ring-cafe-400 outline-none" />
+        </div>
+
+        <!-- Secret Tip -->
+        <div>
+          <label class="block font-bold text-cafe-700 mb-1">세척 / 위생 / 보관 팁</label>
+          <input type="text" id="form-tip" placeholder="예: 열탕 소독한 유리병 보관, 냉장 14일 유통기한 준수" 
+            class="w-full px-3 py-2 bg-white border border-cafe-200 rounded-xl focus:ring-2 focus:ring-cafe-400 outline-none" />
+        </div>
+
+        <!-- Form Action Buttons -->
+        <div class="pt-2 flex items-center justify-end space-x-2">
+          <button type="button" onclick="closeFormModal()" class="px-4 py-2.5 rounded-xl border border-cafe-200 bg-white hover:bg-cafe-100 text-cafe-700 font-bold transition-all">
+            취소
+          </button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-cafe-600 hover:bg-cafe-700 text-white font-bold transition-all shadow-md">
+            저장하기
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-cafe-800 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-2 border border-cafe-600">
+    <i id="toast-icon" class="fa-solid fa-circle-check text-cafe-300"></i>
+    <span id="toast-msg" class="text-xs font-medium">메시지가 표시됩니다.</span>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT LOGIC (1KG BASE UPDATED) -->
+  <!-- ========================================== -->
+  <script>
+    // INITIAL 1KG BATCH RECIPE DATASET
+    const DEFAULT_RECIPES = [
+      {
+        id: 'rec-1',
+        name: '블루베리청 (1kg 생산 기준)',
+        category: '수제 청 & 베이스',
+        emoji: '🫐',
+        desc: '블루베리 과육의 톡톡 터지는 식감과 적정 당도를 갖춘 1kg 완성 수제청',
+        ingredients: [
+          { name: '생/냉동 블루베리', amount: 500, unit: 'g' },
+          { name: '백설탕/자일로스 설탕', amount: 450, unit: 'g' },
+          { name: '레몬즙', amount: 50, unit: 'g' }
+        ],
+        steps: [
+          '블루베리를 베이킹소다 물에 깨끗이 세척 후 키친타월로 수분을 완벽하게 제거합니다.',
+          '블루베리 250g은 손이나 매셔로 알갱이가 씹히도록 가볍게 으깨고, 나머지 250g은 원형 그대로 유지합니다.',
+          '믹싱볼에 으깬 블루베리, 통블루베리, 설탕 450g, 레몬즙 50g을 넣고 주걱으로 고루 섞어줍니다.',
+          '설탕 입자가 자작하게 녹을 때까지 실온에서 1~2시간 중간중간 저어줍니다.',
+          '열탕 소독한 1kg용 용기에 담고 실온 12시간 숙성 후 냉장 보관(보관기간 약 3~4주)합니다.'
+        ],
+        pairing: '1잔 기준: 블루베리청 60g + 탄산수 150g + 거북이 얼음 1개 + 각얼음 120g',
+        tip: '레몬즙 50g은 안토시아닌 색소를 활성화해 선명한 보랏빛을 유지하고 보존성을 높여줍니다.',
+        isFavorite: true
+      },
+      {
+        id: 'rec-2',
+        name: '딸기청 (1kg 생산 기준)',
+        category: '수제 청 & 베이스',
+        emoji: '🍓',
+        desc: '과육 씹히는 식감이 우수한 카페 베스트셀러 딸기라떼 전용 1kg 수제청',
+        ingredients: [
+          { name: '생딸기 (손질 후)', amount: 550, unit: 'g' },
+          { name: '비정제/백설탕', amount: 420, unit: 'g' },
+          { name: '생레몬즙', amount: 30, unit: 'g' }
+        ],
+        steps: [
+          '생딸기의 꼭지를 제거하고 물에 가볍게 씻은 뒤 체에 바쳐 물기를 완전히 건조시킵니다.',
+          '딸기 과육 550g 중 400g은 굵게 으깨고, 150g은 0.8cm 큐브 모양으로 썰어 식감을 살립니다.',
+          '설탕 420g과 레몬즙 30g을 혼합하여 설탕이 잘 녹도록 주걱으로 살살 믹싱합니다.',
+          '열탕 소독 용기에 담은 뒤 실온 6시간 보관 후 냉장 보관(보관기간 약 2주)합니다.'
+        ],
+        pairing: '1잔 기준: 딸기청 70g + 차가운 우유 180g + 큰 구슬 얼음 1개',
+        tip: '딸기 청 프렙 시 믹서기 사용 금지! 수동 매셔로 으깨야 우유와 섞였을 때 상큼한 텍스처가 남습니다.',
+        isFavorite: true
+      },
+      {
+        id: 'rec-3',
+        name: '레몬청 (1kg 생산 기준)',
+        category: '수제 청 & 베이스',
+        emoji: '🍋',
+        desc: '왁스 세척법 준수! 깔끔하고 상큼한 1:1 슬라이스 1kg 수제 레몬청',
+        ingredients: [
+          { name: '손질 완료 슬라이스 레몬', amount: 500, unit: 'g' },
+          { name: '백설탕', amount: 500, unit: 'g' }
+        ],
+        steps: [
+          '[4단계 세척]: 굵은소금 문지르기 -> 베이킹소다 세척 -> 끓는 물 10초 데치기 -> 찬물 헹굼 후 완전 건조.',
+          '레몬 양끝 흰 껍질 부분을 넉넉히 잘라내고, 2.5mm 두께로 일정하게 슬라이스합니다.',
+          '레몬 씨앗을 100% 포크로 제거합니다. (씨앗 포함 시 쓴맛 유발)',
+          '슬라이스 레몬 500g과 설탕 450g을 켜켜이 쌓고, 남은 설탕 50g은 맨 위에 두껍게 덮어 공기를 차단합니다.',
+          '실온에서 2일간 설탕을 녹인 후 냉장 보관합니다.'
+        ],
+        pairing: '1잔 기준: 레몬청 50g + 탄산수/아이스티 160g + 자몽 알맹이 20g 토핑',
+        tip: '레몬 왁스 제거 세척 과정과 씨앗 제거 작업이 레시피 품질의 90%를 결정합니다.',
+        isFavorite: false
+      },
+      {
+        id: 'rec-4',
+        name: '망고 소스/퓨레 (1kg 생산 기준)',
+        category: '수제 청 & 베이스',
+        emoji: '🥭',
+        desc: '진한 텍스처와 과육 큐브가 함유된 1kg 망고 라떼 & 에이드 베이스',
+        ingredients: [
+          { name: '망고 과육 (망고 퓨레/냉동)', amount: 700, unit: 'g' },
+          { name: '설탕 또는 메이플 시럽', amount: 250, unit: 'g' },
+          { name: '생레몬즙', amount: 30, unit: 'g' },
+          { name: '정수', amount: 20, unit: 'g' }
+        ],
+        steps: [
+          '망고 과육 700g 중 500g은 블렌더로 고르게 갈아주고, 200g은 1cm 큐브로 자릅니다.',
+          '냄비에 간 망고, 큐브 망고, 설탕 250g, 정수 20g을 넣고 중약불에서 잘 저어줍니다.',
+          '바글바글 끓기 시작하면 약불로 줄여 3~5분간 점도가 생기도록 졸여줍니다.',
+          '불을 끄고 레몬즙 30g을 섞은 후 완전히 식힙니다.',
+          '소독된 용기에 담아 냉장 보관(약 3주 보관 가능)합니다.'
+        ],
+        pairing: '1잔 기준: 망고 소스 60g + 우유/탄산수 160g + 거북이 얼음 1개',
+        tip: '약간 가열하여 졸여주면 수분이 감소하여 유통기한이 늘어나고 망고 풍미가 대폭 진해집니다.',
+        isFavorite: false
+      },
+      {
+        id: 'rec-5',
+        name: '아쌈 밀크티 농축 베이스 (1kg 생산 기준)',
+        category: '논커피 & 라떼 베이스',
+        emoji: '🧋',
+        desc: '아쌈 CTC 찻잎을 깊게 추출하여 우유만 부으면 완성되는 1kg 농축 밀크티 베이스',
+        ingredients: [
+          { name: '아쌈 CTC 찻잎', amount: 80, unit: 'g' },
+          { name: '정수 (추출용)', amount: 800, unit: 'g' },
+          { name: '비정제 흑당/설탕', amount: 120, unit: 'g' }
+        ],
+        steps: [
+          '정수 800g을 98℃로 끓인 후 아쌈 찻잎 80g을 넣고 뚜껑을 덮어 8분간 뜸을 들이며 추출합니다.',
+          '미세 초미세 여과망이나 클로스 필터를 이용하여 찻잎을 강하게 짜지 않고 자연스럽게 걸러냅니다.',
+          '따뜻한 차 추출액(약 650~700g 환산)에 비정제 설탕 120g을 넣고 완벽히 녹입니다.',
+          '얼음물에 바스켓을 담가 신속하게 쿨링(급속 냉각)시킨 뒤 1kg 용량 소독병에 담아 냉장 보관합니다.'
+        ],
+        pairing: '1잔 기준: 아쌈 베이스 60g + 차가운 우유 160g + 거북이 밀크티 얼음',
+        tip: '급속 쿨링을 거쳐야 찻잎의 떫은맛(탄닌)이 과도하게 올라오는 것을 막고 깔끔한 향을 유지합니다.',
+        isFavorite: true
+      },
+      {
+        id: 'rec-6',
+        name: '리치 초코라떼 베이스 (1kg 생산 기준)',
+        category: '논커피 & 라떼 베이스',
+        emoji: '🍫',
+        desc: '다크 카카오와 연유의 깊은 풍미가 집약된 1kg 대량 초코 리퀴드 베이스',
+        ingredients: [
+          { name: '다크 카카오 파우더', amount: 200, unit: 'g' },
+          { name: '가당 연유', amount: 300, unit: 'g' },
+          { name: '우유', amount: 400, unit: 'g' },
+          { name: '다크 초콜릿 칩 (55% 이상)', amount: 100, unit: 'g' }
+        ],
+        steps: [
+          '냄비에 우유 400g과 연유 300g을 넣고 약불에서 따뜻하게(약 60℃) 데웁니다.',
+          '카카오 파우더 200g을 체쳐 넣고 휩으로 덩어리가 없도록 뭉침 없이 잘 풀어줍니다.',
+          '불을 끄고 다크 초콜릿 칩 100g을 넣어 잔열로 완전히 녹여 풍미를 극대화합니다.',
+          '체에 한 번 걸러 매끄러운 텍스처를 만든 뒤 식혀서 보관병에 담아 냉장 보관합니다.'
+        ],
+        pairing: '1잔 기준: 초코 베이스 70g + 차가운 우유 150g + 큰 구슬 얼음 + 초코 드리즐',
+        tip: '초콜릿 칩을 잔열에 녹여 넣으면 파우더만 썼을 때보다 훨씬 고급스러운 가나슈 풍미가 납니다.',
+        isFavorite: false
+      },
+      {
+        id: 'rec-7',
+        name: '복숭아/레몬 아이스티 베이스 (1kg 생산 기준)',
+        category: '티 & 에이드 베이스',
+        emoji: '🍑',
+        desc: '홍차 추출액과 시럽이 결합되어 빠르게 아이스티를 조제하는 1kg 농축 베이스',
+        ingredients: [
+          { name: '홍차 잎 (실론/아쌈)', amount: 60, unit: 'g' },
+          { name: '복숭아/레몬농축 시럽', amount: 300, unit: 'g' },
+          { name: '정수', amount: 640, unit: 'g' }
+        ],
+        steps: [
+          '정수 640g을 끓여 홍차 잎 60g을 넣고 6분간 진하게 진액을 추출합니다.',
+          '찻잎을 깨끗이 걸러낸 뒤 복숭아/레몬 시럽 300g을 섞어 농축 베이스를 만듭니다.',
+          '충분히 식힌 후 용기에 담아 냉장 보관(약 2주)합니다.'
+        ],
+        pairing: '1잔 기준: 아이스티 베이스 60g + 차가운 정수/탄산수 150g + 자몽 알맹이 25g 토핑',
+        tip: '생자몽 알맹이 토핑을 얹어 제공하면 일반 아이스티와 차별화된 수제 프렌차이즈 비주얼이 됩니다.',
+        isFavorite: true
+      },
+      {
+        id: 'rec-8',
+        name: '거북이 얼음 & 입체 얼음 프렙 (1kg / 1000g 얼음물 배치)',
+        category: '얼음 & 토핑 프렙',
+        emoji: '🐢',
+        desc: '녹아도 음료가 연해지지 않도록 음료 베이스로 얼리는 1,000g 거북이 몰드 얼음 프렙',
+        ingredients: [
+          { name: '음료 베이스 (밀크티/초코/에스프레소/에이드 베이스)', amount: 300, unit: 'g' },
+          { name: '정수', amount: 700, unit: 'g' },
+          { name: '거북이 실리콘 몰드 (개당 약 50g)', amount: 20, unit: '개 분량' }
+        ],
+        steps: [
+          '음료 베이스 300g과 정수 700g을 희석하여 1,000g 아이스 액상을 제조합니다.',
+          '소독된 거북이 실리콘 몰드에 액상을 90% 높이까지 신중하게 부어줍니다.',
+          '몰드를 바닥에 살짝 2~3회 탕탕 쳐서 거북이 눈/껍질 홈의 공기방울을 제거합니다.',
+          '냉동고(-18℃ 이하)에서 최소 10시간 이상 단단하게 급속 냉동합니다.',
+          '얼린 거북이 얼음은 몰드에서 탈형하여 밀폐 밀폐용기에 보관하며 1잔당 1개씩 세팅합니다.'
+        ],
+        pairing: '아쌈 밀크티, 초코라떼, 블루베리 에이드 상단에 1개씩 디스플레이',
+        tip: '공기방울을 잘 빼주어야 거북이 얼굴과 등껍질 무늬가 뭉개지지 않고 선명하게 나옵니다.',
+        isFavorite: true
+      },
+      {
+        id: 'rec-9',
+        name: '큰 구슬 얼음 / 왕 큐브 프렙 (1,000g 투명 아이스 배치)',
+        category: '얼음 & 토핑 프렙',
+        emoji: '🧊',
+        desc: '기포 없이 투명하고 천천히 녹는 1,000g 규격 대형 구슬 얼음 제작 가이드',
+        ingredients: [
+          { name: '한 번 끓여 식힌 온정수', amount: 1000, unit: 'g' },
+          { name: '대형 구슬/큐브 몰드', amount: 1, unit: '세트' }
+        ],
+        steps: [
+          '정수를 한 번 팔팔 끓인 후 미지근하게 식힙니다. (용존 산소와 기포를 제거하여 투명도 상승)',
+          '왕구슬 몰드의 워터라인 수위선에 맞춰 1,000g 액상을 나누어 부어줍니다.',
+          '단열 용기(스티로폼 박스 등) 안에 몰드를 넣고 얼리면 위에서부터 천천히 얼어 보석처럼 투명해집니다.',
+          '12시간 이상 congelation 후 용기에 담아 전용 아이스 피커와 함께 준비합니다.'
+        ],
+        pairing: '딸기라떼, 초코라떼, 밀크티 시그니처 글라스용',
+        tip: '한 번 끓인 물을 사용하는 것이 투명 얼음을 만드는 핵심 바리스타 노하우입니다.',
+        isFavorite: false
+      },
+      {
+        id: 'rec-10',
+        name: '자몽 알맹이 펄프 프렙 (1kg 완성 기준)',
+        category: '얼음 & 토핑 프렙',
+        emoji: '🍊',
+        desc: '생자몽 1.2kg을 손질하여 쓴맛 없이 톡톡 터지는 알갱이만 1kg 정제한 토핑 프렙',
+        ingredients: [
+          { name: '생자몽 (손질 전 약 1.2kg)', amount: 1000, unit: 'g (알맹이)' },
+          { name: '꿀 또는 메이플 시럽', amount: 50, unit: 'g' }
+        ],
+        steps: [
+          '생자몽의 칼로 양끝을 잘라내고 겉껍질을 도려냅니다.',
+          '속하얀 껍질(속피)에 쓴맛이 있으므로 손끝으로 붉은 자몽 알갱이만 알알이 살살 떼어냅니다.',
+          '정제된 자몽 알맹이 950g에 꿀/시럽 50g을 살짝 코팅하듯 버무립니다.',
+          '소독된 락앤락 용기에 담아 냉장 보관하며 에이드/아이스티 토핑 스쿱으로 서빙합니다.'
+        ],
+        pairing: '복숭아 아이스티, 레몬청 에이드, 자몽에이드 상단 1~2스쿱(20~30g) 토핑',
+        tip: '하얀 속껍질이 들어가지 않도록 알갱이만 깨끗이 정제하는 것이 쓴맛 없는 고품질 토핑의 핵심입니다.',
+        isFavorite: true
+      }
+    ];
+
+    // CATEGORY LIST
+    const CATEGORIES = [
+      { id: 'all', name: '전체 보기', emoji: '✨' },
+      { id: '수제 청 & 베이스', name: '수제 청 & 베이스', emoji: '🫐' },
+      { id: '논커피 & 라떼 베이스', name: '논커피 & 라떼 베이스', emoji: '🧋' },
+      { id: '티 & 에이드 베이스', name: '티 & 에이드 베이스', emoji: '🍹' },
+      { id: '얼음 & 토핑 프렙', name: '얼음 & 토핑 프렙', emoji: '🐢' }
+    ];
+
+    // STATE MANAGEMENT
+    let recipes = [];
+    let activeCategory = 'all';
+    let searchQuery = '';
+    let showFavoritesOnly = false;
+    let currentModalRecipeId = null;
+    let targetBatchWeight = 1000; // Default 1kg (1000g)
+
+    // LOCAL STORAGE KEYS
+    const STORAGE_KEY = 'aesthetic_cafe_1kg_recipes_v2';
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      loadRecipes();
+      renderCategoryTabs();
+      renderRecipes();
+      updateFavoriteBadge();
+    });
+
+    // LOAD DATA FROM STORAGE OR DEFAULT
+    function loadRecipes() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          recipes = JSON.parse(stored);
+        } catch (e) {
+          recipes = [...DEFAULT_RECIPES];
+        }
+      } else {
+        recipes = [...DEFAULT_RECIPES];
+        saveRecipesToStorage();
+      }
+    }
+
+    function saveRecipesToStorage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes));
+    }
+
+    // RENDER CATEGORY TABS
+    function renderCategoryTabs() {
+      const container = document.getElementById('category-tabs');
+      container.innerHTML = CATEGORIES.map(cat => {
+        const isActive = activeCategory === cat.id;
+        return `
+          <button onclick="selectCategory('${cat.id}')" 
+            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all flex items-center space-x-1.5 ${
+              isActive 
+                ? 'bg-cafe-600 text-white shadow-md' 
+                : 'bg-white text-cafe-600 border border-cafe-200 hover:bg-cafe-100'
+            }">
+            <span>${cat.emoji}</span>
+            <span>${cat.name}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectCategory(catId) {
+      activeCategory = catId;
+      renderCategoryTabs();
+      renderRecipes();
+    }
+
+    // SEARCH & FILTER LOGIC
+    function handleSearch() {
+      const input = document.getElementById('search-input');
+      searchQuery = input.value.trim().toLowerCase();
+      document.getElementById('clear-search-btn').classList.toggle('hidden', !searchQuery);
+      renderRecipes();
+    }
+
+    function clearSearch() {
+      document.getElementById('search-input').value = '';
+      searchQuery = '';
+      document.getElementById('clear-search-btn').classList.add('hidden');
+      renderRecipes();
+    }
+
+    function toggleFavoriteFilter() {
+      showFavoritesOnly = !showFavoritesOnly;
+      const btn = document.getElementById('favorite-filter-btn');
+      const icon = document.getElementById('fav-filter-icon');
+      
+      if (showFavoritesOnly) {
+        btn.classList.add('bg-cafe-200', 'border-cafe-400', 'text-cafe-800');
+        icon.classList.remove('fa-regular');
+        icon.classList.add('fa-solid', 'text-red-500');
+      } else {
+        btn.classList.remove('bg-cafe-200', 'border-cafe-400', 'text-cafe-800');
+        icon.classList.remove('fa-solid', 'text-red-500');
+        icon.classList.add('fa-regular', 'text-cafe-400');
+      }
+      renderRecipes();
+    }
+
+    function resetFilters() {
+      activeCategory = 'all';
+      searchQuery = '';
+      showFavoritesOnly = false;
+      document.getElementById('search-input').value = '';
+      document.getElementById('clear-search-btn').classList.add('hidden');
+      
+      const btn = document.getElementById('favorite-filter-btn');
+      const icon = document.getElementById('fav-filter-icon');
+      btn.classList.remove('bg-cafe-200', 'border-cafe-400', 'text-cafe-800');
+      icon.classList.remove('fa-solid', 'text-red-500');
+      icon.classList.add('fa-regular', 'text-cafe-400');
+
+      renderCategoryTabs();
+      renderRecipes();
+    }
+
+    // RENDER RECIPE CARDS
+    function renderRecipes() {
+      const grid = document.getElementById('recipe-grid');
+      const empty = document.getElementById('empty-state');
+
+      let filtered = recipes.filter(r => {
+        // Category filter
+        if (activeCategory !== 'all' && r.category !== activeCategory) return false;
+        
+        // Favorites filter
+        if (showFavoritesOnly && !r.isFavorite) return false;
+
+        // Search query
+        if (searchQuery) {
+          const matchName = r.name.toLowerCase().includes(searchQuery);
+          const matchCategory = r.category.toLowerCase().includes(searchQuery);
+          const matchDesc = r.desc.toLowerCase().includes(searchQuery);
+          const matchIng = r.ingredients.some(i => i.name.toLowerCase().includes(searchQuery));
+          const matchPairing = r.pairing ? r.pairing.toLowerCase().includes(searchQuery) : false;
+          return matchName || matchCategory || matchDesc || matchIng || matchPairing;
+        }
+
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(r => `
+        <div class="glass-card rounded-2xl p-5 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between group cursor-pointer relative"
+             onclick="openDetailModal('${r.id}')">
+          
+          <div>
+            <!-- Card Top Bar -->
+            <div class="flex items-start justify-between mb-3">
+              <span class="text-4xl filter drop-shadow group-hover:scale-110 transition-transform duration-300">
+                ${r.emoji || '🍹'}
+              </span>
+              <div class="flex items-center space-x-1">
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-cafe-100 text-cafe-700 border border-cafe-200">
+                  ${r.category}
+                </span>
+                <button onclick="toggleFavorite(event, '${r.id}')" class="p-1.5 text-cafe-400 hover:text-red-500 transition-colors">
+                  <i class="${r.isFavorite ? 'fa-solid fa-heart text-red-500' : 'fa-regular fa-heart'} text-base"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Title & Desc -->
+            <h3 class="font-serif font-bold text-lg text-cafe-800 mb-1 group-hover:text-cafe-600 transition-colors">
+              ${r.name}
+            </h3>
+            <p class="text-xs text-cafe-500 line-clamp-2 leading-relaxed mb-4">
+              ${r.desc || '1kg 배치 기준 카페 수제 프렙 레시피입니다.'}
+            </p>
+          </div>
+
+          <div>
+            <!-- Ingredients Preview (1kg base) -->
+            <div class="bg-cafe-50/80 rounded-xl p-2.5 border border-cafe-200/50 mb-3 text-[11px] text-cafe-600 space-y-1">
+              <p class="font-bold text-cafe-700 text-[10px] uppercase tracking-wider">1kg 주요 배합 재료</p>
+              <p class="truncate">
+                ${r.ingredients.map(i => `${i.name} ${i.amount}${i.unit}`).join(' · ')}
+              </p>
+            </div>
+
+            <!-- Card Bottom Bar -->
+            <div class="flex items-center justify-between text-xs font-semibold text-cafe-600 pt-1">
+              <span class="inline-flex items-center space-x-1 text-cafe-500 text-[11px]">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <span>1kg 기준</span>
+              </span>
+              <span class="inline-flex items-center space-x-1 text-cafe-700 group-hover:translate-x-1 transition-transform">
+                <span>배치 계산기 보기</span>
+                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      `).join('');
+    }
+
+    // FAVORITES TOGGLE
+    function toggleFavorite(e, recipeId) {
+      e.stopPropagation();
+      const recipe = recipes.find(r => r.id === recipeId);
+      if (recipe) {
+        recipe.isFavorite = !recipe.isFavorite;
+        saveRecipesToStorage();
+        renderRecipes();
+        updateFavoriteBadge();
+        showToast(recipe.isFavorite ? '즐겨찾기에 추가되었습니다 ❤️' : '즐겨찾기에서 해제되었습니다.');
+      }
+    }
+
+    function toggleFavoriteFromModal() {
+      if (!currentModalRecipeId) return;
+      const recipe = recipes.find(r => r.id === currentModalRecipeId);
+      if (recipe) {
+        recipe.isFavorite = !recipe.isFavorite;
+        saveRecipesToStorage();
+        renderRecipes();
+        updateFavoriteBadge();
+        updateModalFavUI(recipe.isFavorite);
+        showToast(recipe.isFavorite ? '즐겨찾기에 추가되었습니다 ❤️' : '즐겨찾기에서 해제되었습니다.');
+      }
+    }
+
+    function updateFavoriteBadge() {
+      const count = recipes.filter(r => r.isFavorite).length;
+      document.getElementById('fav-count-badge').textContent = count;
+    }
+
+    function updateModalFavUI(isFav) {
+      const icon = document.getElementById('modal-fav-icon');
+      if (isFav) {
+        icon.className = 'fa-solid fa-heart text-red-500';
+      } else {
+        icon.className = 'fa-regular fa-heart text-cafe-400';
+      }
+    }
+
+    // ==========================================
+    // DETAIL MODAL & BATCH SCALE CALCULATOR
+    // ==========================================
+    function openDetailModal(recipeId) {
+      const recipe = recipes.find(r => r.id === recipeId);
+      if (!recipe) return;
+
+      currentModalRecipeId = recipeId;
+      targetBatchWeight = 1000; // Reset to 1kg standard default
+
+      document.getElementById('detail-emoji').textContent = recipe.emoji || '🍹';
+      document.getElementById('detail-category').textContent = recipe.category;
+      document.getElementById('detail-title').textContent = recipe.name;
+      document.getElementById('detail-pairing').textContent = recipe.pairing || '1잔당 적정 권장량을 준수해 서빙하세요.';
+      document.getElementById('detail-tip').textContent = recipe.tip || '열탕 소독 용기를 사용하고 냉장 보관 유통기한을 준수하세요.';
+
+      document.getElementById('custom-weight-input').value = 1000;
+
+      // Render Steps
+      const stepsContainer = document.getElementById('detail-steps');
+      stepsContainer.innerHTML = recipe.steps.map((step, idx) => `
+        <li class="flex items-start space-x-3 text-xs sm:text-sm text-cafe-700 leading-relaxed">
+          <span class="flex-shrink-0 w-5 h-5 rounded-full bg-cafe-200 text-cafe-800 text-xs font-bold flex items-center justify-center mt-0.5">
+            ${idx + 1}
+          </span>
+          <span>${step}</span>
+        </li>
+      `).join('');
+
+      updateModalFavUI(recipe.isFavorite);
+      renderCalculatedIngredients();
+
+      // Show Modal
+      const modal = document.getElementById('detail-modal');
+      const card = document.getElementById('detail-modal-card');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        card.classList.remove('scale-95');
+      }, 10);
+    }
+
+    function setTargetWeight(weightGrams) {
+      targetBatchWeight = weightGrams;
+      document.getElementById('custom-weight-input').value = weightGrams;
+      renderCalculatedIngredients();
+    }
+
+    function handleCustomWeightInput(val) {
+      const parsed = parseFloat(val);
+      if (!isNaN(parsed) && parsed > 0) {
+        targetBatchWeight = parsed;
+        renderCalculatedIngredients();
+      }
+    }
+
+    function renderCalculatedIngredients() {
+      const recipe = recipes.find(r => r.id === currentModalRecipeId);
+      if (!recipe) return;
+
+      // Ratio multiplier relative to 1000g base recipe
+      const scaleMultiplier = targetBatchWeight / 1000;
+      document.getElementById('batch-scale-indicator').textContent = `${scaleMultiplier.toFixed(2)}x 배율 (${targetBatchWeight >= 1000 ? (targetBatchWeight/1000) + 'kg' : targetBatchWeight + 'g'})`;
+
+      const container = document.getElementById('detail-ingredients');
+      container.innerHTML = recipe.ingredients.map(ing => {
+        const scaledAmount = ing.amount * scaleMultiplier;
+        const displayAmount = Number.isInteger(scaledAmount) ? scaledAmount : scaledAmount.toFixed(1);
+
+        return `
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-cafe-200/70 shadow-sm text-xs sm:text-sm">
+            <span class="font-medium text-cafe-700">${ing.name}</span>
+            <span class="font-bold text-cafe-800 bg-cafe-100 px-2.5 py-1 rounded-lg text-xs">
+              ${displayAmount} ${ing.unit}
+            </span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function closeDetailModal() {
+      const modal = document.getElementById('detail-modal');
+      const card = document.getElementById('detail-modal-card');
+      modal.classList.add('opacity-0');
+      card.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        currentModalRecipeId = null;
+      }, 300);
+    }
+
+    // ==========================================
+    // ADD / EDIT FORM MODAL
+    // ==========================================
+    function openRecipeModal(recipeIdToEdit = null) {
+      const form = document.getElementById('recipe-form');
+      form.reset();
+
+      if (recipeIdToEdit) {
+        const r = recipes.find(item => item.id === recipeIdToEdit);
+        if (r) {
+          document.getElementById('form-id').value = r.id;
+          document.getElementById('form-title').innerHTML = '<i class="fa-solid fa-pen-to-square text-cafe-200"></i><span>1kg 레시피 수정</span>';
+          document.getElementById('form-emoji').value = r.emoji || '🍹';
+          document.getElementById('form-name').value = r.name;
+          document.getElementById('form-category').value = r.category;
+          document.getElementById('form-desc').value = r.desc || '';
+          
+          // Convert ingredients array back to string lines
+          const ingLines = r.ingredients.map(i => `${i.name} ${i.amount}${i.unit}`).join('\n');
+          document.getElementById('form-ingredients').value = ingLines;
+
+          // Steps to string
+          document.getElementById('form-steps').value = r.steps.join('\n');
+          document.getElementById('form-pairing').value = r.pairing || '';
+          document.getElementById('form-tip').value = r.tip || '';
+        }
+      } else {
+        document.getElementById('form-id').value = '';
+        document.getElementById('form-title').innerHTML = '<i class="fa-solid fa-utensils text-cafe-200"></i><span>새 1kg 레시피 등록</span>';
+      }
+
+      // Hide detail modal if open
+      if (currentModalRecipeId) closeDetailModal();
+
+      const modal = document.getElementById('form-modal');
+      const card = document.getElementById('form-modal-card');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        card.classList.remove('scale-95');
+      }, 10);
+    }
+
+    function closeFormModal() {
+      const modal = document.getElementById('form-modal');
+      const card = document.getElementById('form-modal-card');
+      modal.classList.add('opacity-0');
+      card.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    function saveRecipe(event) {
+      event.preventDefault();
+
+      const id = document.getElementById('form-id').value;
+      const emoji = document.getElementById('form-emoji').value.trim() || '🍹';
+      const name = document.getElementById('form-name').value.trim();
+      const category = document.getElementById('form-category').value;
+      const desc = document.getElementById('form-desc').value.trim();
+      const rawIng = document.getElementById('form-ingredients').value.trim();
+      const rawSteps = document.getElementById('form-steps').value.trim();
+      const pairing = document.getElementById('form-pairing').value.trim();
+      const tip = document.getElementById('form-tip').value.trim();
+
+      // Parse ingredients text into objects based on 1kg total yield
+      const ingredients = rawIng.split('\n').filter(line => line.trim() !== '').map(line => {
+        const match = line.match(/^(.+?)\s*([\d.]+)\s*([a-zA-C%가-힣]*)$/);
+        if (match) {
+          return { name: match[1].trim(), amount: parseFloat(match[2]), unit: match[3] || 'g' };
+        } else {
+          return { name: line.trim(), amount: 100, unit: 'g' };
+        }
+      });
+
+      const steps = rawSteps.split('\n').filter(line => line.trim() !== '');
+
+      if (id) {
+        // Update existing
+        const index = recipes.findIndex(r => r.id === id);
+        if (index !== -1) {
+          recipes[index] = {
+            ...recipes[index],
+            emoji,
+            name,
+            category,
+            desc,
+            ingredients,
+            steps,
+            pairing,
+            tip
+          };
+          showToast('1kg 레시피가 성공적으로 수정되었습니다 ✨');
+        }
+      } else {
+        // Create new
+        const newRecipe = {
+          id: 'rec-' + Date.now(),
+          emoji,
+          name,
+          category,
+          desc,
+          ingredients,
+          steps,
+          pairing,
+          tip,
+          isFavorite: false
+        };
+        recipes.unshift(newRecipe);
+        showToast('새 1kg 프렙 레시피가 등록되었습니다 🍹');
+      }
+
+      saveRecipesToStorage();
+      renderRecipes();
+      closeFormModal();
+    }
+
+    function editCurrentRecipe() {
+      if (currentModalRecipeId) {
+        openRecipeModal(currentModalRecipeId);
+      }
+    }
+
+    function deleteCurrentRecipe() {
+      if (!currentModalRecipeId) return;
+      if (confirm('이 1kg 레시피를 삭제하시겠습니까?')) {
+        recipes = recipes.filter(r => r.id !== currentModalRecipeId);
+        saveRecipesToStorage();
+        renderRecipes();
+        updateFavoriteBadge();
+        closeDetailModal();
+        showToast('레시피가 삭제되었습니다.');
+      }
+    }
+
+    // ==========================================
+    // TOAST NOTIFICATIONS
+    // ==========================================
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.textContent = msg;
+
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
